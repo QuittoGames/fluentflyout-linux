@@ -1,0 +1,25 @@
+{
+  "id": "001",
+  "date": "23:50:00/22:10:26",
+  "type": {
+    "area": "architecture",
+    "scope": "whole-application"
+  },
+  "title": "Rust + GTK4 + libadwaita as the only UI stack",
+  "context": "FluentFlyout is a WPF/.NET application. The port must feel native on Fedora/GNOME and must render through GTK's GSK Vulkan renderer, which is verified to be available in the installed GTK 4.22.4.",
+  "options": [
+    "Rust + gtk4-rs + libadwaita-rs (native widgets, GSK renderer)",
+    "Rust + Tauri/webview (HTML UI)",
+    "Rust + egui/wgpu custom renderer",
+    "C++ + GTK4 with gtkmm"
+  ],
+  "proposal": "Rust + gtk4-rs + libadwaita-rs, using GTK CSS and AdwAnimation for the visual layer.",
+  "decision": "Rust + gtk4-rs + libadwaita-rs. No webview and no custom Vulkan renderer: GTK's own GSK Vulkan backend satisfies the graphics requirement without reimplementing text shaping, input methods and accessibility.",
+  "consequences": [
+    "GNOME-native widgets, icon theme, accessibility and input methods come for free.",
+    "Visual fidelity is expressed with CSS classes instead of XAML styles.",
+    "The app cannot reproduce Windows taskbar embedding or global input hooks.",
+    "Builds require gtk4-devel and libadwaita-devel."
+  ],
+  "status": "ACCEPTED"
+}

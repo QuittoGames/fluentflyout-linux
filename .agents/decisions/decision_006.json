@@ -1,0 +1,22 @@
+{
+  "id": "006",
+  "date": "23:55:00/22:10:26",
+  "type": {
+    "area": "scope",
+    "scope": "feature-set"
+  },
+  "title": "Omit features that have no faithful Linux equivalent",
+  "context": "Four upstream features depend on Windows-only platform capabilities. Implementing look-alikes would produce behaviour the platform cannot support and would misrepresent the result.",
+  "options": [
+    "Implement approximations (fake queue data, a Shell extension, a global hook workaround)",
+    "Omit them and document the platform limitation",
+    "Ship them disabled behind a hidden flag"
+  ],
+  "proposal": "Omit Next-Up, the taskbar widget/visualizer, acrylic backdrop blur and the global media-key hook; document each limitation in README and docs/rea-report.md.",
+  "decision": "Omit and document. The remaining features are complete and verified rather than diluted by non-functional imitations.",
+  "consequences": [
+    "The port is smaller than the upstream feature list.",
+    "Each omission is traceable to a platform constraint, with the nearest supported behaviour described."
+  ],
+  "status": "ACCEPTED"
+}

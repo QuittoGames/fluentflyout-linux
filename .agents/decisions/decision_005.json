@@ -1,0 +1,24 @@
+{
+  "id": "005",
+  "date": "23:54:00/22:10:26",
+  "type": {
+    "area": "product",
+    "scope": "triggering"
+  },
+  "title": "Trigger model: D-Bus methods plus automatic display on player change",
+  "context": "Upstream shows the media flyout from a global low-level keyboard hook. Wayland forbids that for ordinary clients, and the XDG GlobalShortcuts portal is not available on the target session.",
+  "options": [
+    "xdg-desktop-portal GlobalShortcuts (GNOME 48+, portal absent in the verified environment)",
+    "D-Bus methods that a desktop custom shortcut can call",
+    "Automatic display whenever the active player changes track or state",
+    "A GNOME Shell extension"
+  ],
+  "proposal": "Expose ShowMediaFlyout and friends over D-Bus, and additionally raise the flyout when the active player changes track or playback state (setting show_on_media_change, default on).",
+  "decision": "D-Bus methods plus show_on_media_change. The portal path remains a documented future option; no Shell extension is shipped.",
+  "consequences": [
+    "Users bind a key once in Settings > Keyboard > Custom Shortcuts.",
+    "The flyout can also appear without any key press, which is a deliberate behavioural difference from Windows.",
+    "show_on_media_change can be disabled in settings."
+  ],
+  "status": "ACCEPTED"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "004",
+  "date": "23:53:00/22:10:26",
+  "type": {
+    "area": "integration",
+    "scope": "lock-keys"
+  },
+  "title": "Lock-key state from LED class devices plus evdev, never a privileged daemon",
+  "context": "Windows answers 'is Caps Lock on?' directly. Linux stores the state in the kernel input subsystem and only exposes it through LED class devices (state) and evdev (events). Reading events requires membership of the input group.",
+  "options": [
+    "LED class devices for state + evdev for press events",
+    "evdev only, inferring state by toggling a local flag",
+    "A root helper or systemd service that exports state over D-Bus"
+  ],
+  "proposal": "Poll /sys/class/leds/*::{capslock,numlock,scrolllock}/brightness every 150 ms for state, and read /dev/input/event* when accessible for press timing. Report LockKeySupport::{Full,StateOnly,Unavailable}.",
+  "decision": "LED class devices plus optional evdev. No root, no system-wide service, no inferred state.",
+  "consequences": [
+    "Without /dev/input access the flyout still reflects the real state, but it appears on the LED poll rather than on the key press (StateOnly).",
+    "Insert has no LED device and is therefore event-only; it is inert on systems without evdev access.",
+    "On platforms without /sys/class/leds (containers, some virtual keyboards) the feature reports Unavailable instead of guessing."
+  ],
+  "status": "ACCEPTED"
+}

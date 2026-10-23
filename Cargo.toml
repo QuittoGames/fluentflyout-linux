@@ -1,0 +1,51 @@
+[package]
+name = "fluentflyout-linux"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Native GTK4/libadwaita port of FluentFlyout's media, lock-key and volume flyouts"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/unchihugo/FluentFlyout"
+
+[[bin]]
+name = "fluentflyout"
+path = "src/main.rs"
+
+[dependencies]
+# GTK stack. glib/gio are re-exported by gtk4 so that we never pin a
+# mismatched version of those crates.
+gtk = { package = "gtk4", version = "0.11", features = ["v4_20"] }
+# Aliased to `adw` so module paths match the upstream gtk-rs convention.
+adw = { package = "libadwaita", version = "0.9", features = ["v1_8"] }
+gtk4-layer-shell = { version = "0.8", optional = true }
+
+# MPRIS / D-Bus. zbus 6 owns its runtime (`default-rt`): connections are
+# driven *inside* `zbus::block_on`, which is why no external executor is used
+# for D-Bus work.
+zbus = "6"
+async-channel = "2"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+
+# Serialization / config
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Utilities
+anyhow = "1"
+thiserror = "2"
+log = { version = "0.4", features = ["std"] }
+dirs = "6"
+sha2 = "0.10"
+
+[features]
+default = []
+# Builds the optional wlr-layer-shell backend, which gives real anchored
+# bottom-center flyouts on wlroots-based compositors and KDE Plasma.
+# GNOME Shell does not implement the protocol; the code probes for it at
+# runtime and degrades to compositor-managed placement.
+layer-shell = ["dep:gtk4-layer-shell"]
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = true

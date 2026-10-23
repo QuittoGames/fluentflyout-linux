@@ -1,0 +1,23 @@
+{
+  "id": "003",
+  "date": "23:52:00/22:10:26",
+  "type": {
+    "area": "integration",
+    "scope": "audio"
+  },
+  "title": "Master volume through wpctl instead of libpipewire",
+  "context": "The volume flyout needs read and write access to the default sink level. PipeWire has no D-Bus control surface; WirePlumber ships the supported wpctl CLI.",
+  "options": [
+    "Link libpipewire and implement a registry/device listener",
+    "Shell out to wpctl get-volume/set-volume/set-mute",
+    "Use PulseAudio compatibility through pactl"
+  ],
+  "proposal": "wpctl, discovered in PATH plus /usr/bin, /usr/sbin, /bin, /usr/local/bin.",
+  "decision": "wpctl. Three operations do not justify linking against libpipewire, and wpctl is the interface WirePlumber documents and guarantees.",
+  "consequences": [
+    "The audio service reports Unavailable when wpctl is missing or no default sink exists; the volume flyout then never appears and nothing crashes.",
+    "The service is event-free (no device-change signal), so the level is re-read on demand when the flyout opens.",
+    "Migrating to libpipewire later only affects src/audio/mod.rs."
+  ],
+  "status": "ACCEPTED"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "002",
+  "date": "23:51:00/22:10:26",
+  "type": {
+    "area": "architecture",
+    "scope": "media"
+  },
+  "title": "MPRIS as the media integration, with app-side player arbitration",
+  "context": "Windows exposes a single 'current session' through SMTC. Linux players each export org.mpris.MediaPlayer2.Player at the same object path, so there is no system-provided notion of which player is active.",
+  "options": [
+    "MPRIS over D-Bus with our own active-player selection",
+    "Read player state through PipeWire only (no transport control)",
+    "Shell out to playerctl"
+  ],
+  "proposal": "One zbus MessageStream for PropertiesChanged and NameOwnerChanged, plus explicit arbitration: pinned player, else most recently active playing player, else most recently active paused player.",
+  "decision": "MPRIS with app-side arbitration and periodic discovery reconciliation every ~3 s, so a missed bus signal cannot leave a dead player on screen.",
+  "consequences": [
+    "Players that do not implement optional MPRIS members degrade per capability (CanPlay/CanGoNext/CanSeek...).",
+    "No queue look-ahead is available, so the Next-Up flyout cannot be reproduced.",
+    "Transport actions are only offered when the player advertises the capability."
+  ],
+  "status": "ACCEPTED"
+}

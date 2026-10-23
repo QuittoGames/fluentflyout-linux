@@ -1,0 +1,9 @@
+# Normalise line endings: the project is developed on Windows and built in
+# WSL/Linux, so the repository stores LF and only Windows-native text keeps CRLF.
+* text=auto eol=lf
+*.sh text eol=lf
+*.rs text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.json text eol=lf
+*.png binary
